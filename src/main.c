@@ -1,15 +1,29 @@
-
+/**
+ * @file main.c
+ * @author your name (you@domain.com)
+ * @brief
+ * @version 0.1
+ * @date 2024-01-05
+ *
+ * @copyright Copyright (c) 2024
+ *
+*/
 #include "aiio_adapter_include.h"
-
+#include "led_dev.h"
+#include "config_buttom.h"
+#include "wifi_sta.h"
+#include "sta_smarconfig.h"
 
 void aiio_main(void* params)
 {
-    aiio_log_a("Hello EasyLogger!");
-    aiio_log_e("Hello EasyLogger!");
-    aiio_log_w("Hello EasyLogger!");
-    aiio_log_i("Hello EasyLogger!");
-    aiio_log_d("Hello EasyLogger!");
-    aiio_log_v("Hello EasyLogger!");
+    //初始化网络灯
+    devLedNetWorkdInit();
+    // 配网按键初始化
+    configButtomInit();
+    //WiFi 连接测试
+    staWiFiInit();
+    smartconfig_blufi_init();
+    aiio_blufi_set_ble_name("HA-dev_blufi");
 
     while (1)
     {
