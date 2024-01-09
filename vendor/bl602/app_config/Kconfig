@@ -1,4 +1,74 @@
-menu "application"
+menu "HomeAssistant config"
+     menu "MQTT server config"
+        config MQTT_HOST
+                string "set HomeAssistant MQTT server host"
+                default "\"wx.ai-thinker.com\""
 
+        config MQTT_PORT
+                int "set HomeAssistant MQTT server port"
+                default 1883 
+     endmenu
+        
+     menu "HomeAssistant device"
+        config HA_AUTOMATIC_DISCOVERY
+            string "set HomeAssistant MQTT automatic discovery" 
+            default "\"homeassistant\""  
+    endmenu
+     menu "chip platform"
+        config DEVICE_TYPE
+            string "chip platform"
+            default "bl602"
+    endmenu
 endmenu
+
+menu "RGB config"
+        choice NETWORKD_LED
+          bool "set NetWorkd led"
+   	  default RGB_CONFIG_BLUE
+
+          config RGB_CONFIG_RED
+   	    bool "RGB-Red"
+          config RGB_CONFIG_GREED
+   	    bool "RGB-Greed"
+          config RGB_CONFIG_BLUE
+   	    bool "RGB-Blue"          
+        endchoice
+
+        config NETWORKD_LED
+    	   string
+    	   default AIIO_GPIO_NUM_14 if RGB_CONFIG_RED
+    	   default AIIO_GPIO_NUM_17 if RGB_CONFIG_GREED
+    	   default AIIO_GPIO_NUM_3  if RGB_CONFIG_BLUE
+
+       choice CTRL_LED
+          bool "set ctrl led"
+             default RGB_C_CONFIG_GREED
+
+          config RGB_C_CONFIG_RED
+   	    bool "RGB-Red"
+          config RGB_C_CONFIG_GREED
+   	    bool "RGB-Greed"
+          config RGB_C_CONFIG_BLUE
+   	    bool "RGB-Blue"   
+        endchoice
+
+       config CTRL_LED
+    	        string
+    	           default AIIO_GPIO_NUM_14 if RGB_C_CONFIG_RED
+    	           default AIIO_GPIO_NUM_17 if RGB_C_CONFIG_GREED
+    	           default AIIO_GPIO_NUM_3  if RGB_C_CONFIG_BLUE
+endmenu
+
+menu "buttom config"
+      menu "wifi config buttom"
+                config BUTTOM_PIN
+                        string "wifi config buttom input pin" 
+                        default  AIIO_GPIO_NUM_8 
+                config LONG_PRESS_TIME
+                        int "buttom long press time \(ms\)"
+                        default 20000
+        endmenu
+endmenu
+
+
 

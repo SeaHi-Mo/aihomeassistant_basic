@@ -11,9 +11,6 @@
 #ifndef WIFI_STA_H
 #define WIFI_STA_H
 
-
-
-
 void staWiFiInit(void);
 void staWiFiConnect(char* ssid, char* password);
 

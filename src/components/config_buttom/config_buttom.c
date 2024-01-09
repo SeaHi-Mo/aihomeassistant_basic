@@ -14,8 +14,8 @@
 #include "aiio_adapter_include.h"
 #include "sta_smarconfig.h"
 #include "aiio_log.h"
-#define CONFIGBUTTOM_PIN AIIO_GPIO_NUM_8
-#define CONFIGBUTTOM_LONG_PRESS_TIME 2000
+#define CONFIGBUTTOM_PIN CONFIG_BUTTOM_PIN 
+#define CONFIGBUTTOM_LONG_PRESS_TIME CONFIG_LONG_PRESS_TIME
 
 static aiio_os_thread_handle_t* configButtom_task;
 /**
@@ -35,7 +35,7 @@ static void configButtomLongPressCb(void* arg)
             {
                 config_buttom_press_cout++;
                 aiio_os_tick_dealy(aiio_os_ms2tick(100));
-                if (config_buttom_press_cout>=(2000/100)) {
+                if (config_buttom_press_cout>=(CONFIGBUTTOM_LONG_PRESS_TIME/100)) {
                     /**** 按键长按测试打印 ****/
                     aiio_log_d(">>> onfig buttom long press <<<");
                     smartconfig_blufi_start();

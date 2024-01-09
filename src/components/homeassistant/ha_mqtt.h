@@ -18,8 +18,13 @@ typedef struct {
     char* mqtt_host;
     char* mqtt_username;
     char* mqtt_password;
-    char dev_mac[12];
+    char* dev_mac;
     char* dev_name;
+    unsigned int port;
 }ha_devMsg_t;
+
+extern ha_devMsg_t homeAssistant_dev;
+void ha_dev_mqtt_connenct(ha_devMsg_t* devMsg);
+
 
 #endif

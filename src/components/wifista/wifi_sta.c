@@ -14,14 +14,18 @@
 #include "aiio_adapter_include.h"
 #include "led_dev.h"
 #include "sta_smarconfig.h"
+#include "ai_flash.h"
+
 static int32_t ret = 0;
 static int32_t rssi = 0;
 static int32_t state = 0;
 static bool wifi_is_connect;
 int wifi_config_start = false;
-uint8_t mac[MAC_LEN];
+unsigned char mac[MAC_LEN];
 
 aiio_wifi_sta_connect_ind_stat_info_t wifi_ind_stat;
+
+
 /**
  * @brief cb_wifi_event
  *    连接WiFi的回调
@@ -90,6 +94,19 @@ static void cb_wifi_event(aiio_input_event_t* event, void* data)
             aiio_log_d("wifi mac = %02x%02x%02x%02x%02x%02x!!", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
             aiio_wifi_sta_connect_ind_stat_get(&wifi_ind_stat);
             aiio_log_d("wifi sta_bssid = %02x%02x%02x%02x%02x%02x", wifi_ind_stat.bssid[0], wifi_ind_stat.bssid[1], wifi_ind_stat.bssid[2], wifi_ind_stat.bssid[3], wifi_ind_stat.bssid[4], wifi_ind_stat.bssid[5]);
+            //下方开始连接服务器
+            /*********    保存WiFi 信息   **** */
+            strcpy(homeAssistant_dev.wifi_ssid, wifi_ind_stat.ssid);
+            strcpy(homeAssistant_dev.wifi_password, wifi_ind_stat.passphr);
+            /*********** 配置mac 地址 ********/
+            memset(homeAssistant_dev.dev_mac, 0, 12);
+            sprintf(homeAssistant_dev.dev_mac, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+            /************ 配置 device name   *************/
+            memset(homeAssistant_dev.dev_name, 0, 32);
+            sprintf(homeAssistant_dev.dev_name, "%s-%02x%02x", CONFIG_DEVICE_TYPE, mac[4], mac[5]);
+
+            /************* 发起连接  ********/
+            ha_dev_mqtt_connenct(&homeAssistant_dev);
 
         }
         break;

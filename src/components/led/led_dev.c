@@ -13,11 +13,12 @@
 #include <string.h>
 #include "aiio_adapter_include.h"
 #include "led_dev.h"
-#define DEV_LED_NETWORKD_BLUE AIIO_GPIO_NUM_3
-#define DEV_LED_CTRL_GREEN AIIO_GPIO_NUM_17
+#define DEV_LED_NETWORKD_BLUE CONFIG_NETWORKD_LED
+#define DEV_LED_CTRL_GREEN CONFIG_CTRL_LED
 
 static led_dev_state_t led_dev_state = LED_DEV_NETWORKD_STATE_NONE;
 static int led_dev_ctrl_state = 0;
+
 /**
  * @brief
  *
