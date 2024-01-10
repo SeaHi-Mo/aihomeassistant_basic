@@ -22,6 +22,8 @@ void aiio_main(void* params)
 
     //初始化网络灯
     devLedNetWorkdInit();
+    //初始化受控灯
+    devLedCtrlInit();
     // 配网按键初始化
     configButtomInit();
     //WiFi 连接测试

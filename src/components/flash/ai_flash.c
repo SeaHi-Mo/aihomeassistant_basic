@@ -39,7 +39,6 @@ void ai_ha_deMsg_flash_nvs_init(ha_devMsg_t* ha_devMsg)
     ha_devMsg->port = CONFIG_MQTT_PORT;
     ha_devMsg->wifi_ssid = malloc(64);
     ha_devMsg->wifi_password = malloc(64);
-
 }
 /**
  * @brief 获取连接信息

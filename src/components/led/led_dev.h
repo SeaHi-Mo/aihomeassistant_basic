@@ -21,6 +21,6 @@ typedef enum {
 void devLedNetWorkdInit(void);
 void devLedNetWorkdChangeState(led_dev_state_t led_dev_t);
 void devLedCtrlInit(void);
-void devLedCtrlValueFromPayload(char* payload);
+void devLedCtrlValueFromPayload(const char* payload, int payload_len);
 int devLedCtrlGetValue(void);
 #endif

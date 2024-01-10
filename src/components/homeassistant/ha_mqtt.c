@@ -13,12 +13,15 @@
 #include <string.h>
 #include "aiio_adapter_include.h"
 #include "ai_flash.h"
+#include "led_dev.h"
 
 unsigned char mac[6] = { 0 };
 extern unsigned char mac[MAC_LEN];
 static aiio_err_t mqtt_event_cb(aiio_mqtt_event_handle_t event);
 
 static aiio_mqtt_client_config_t mqtt_cfg;
+
+discovery_payload_t discovery_payload = { 0 };
 /**
  * @brief
  *
@@ -58,6 +61,20 @@ static aiio_err_t mqtt_event_cb(aiio_mqtt_event_handle_t event)
             aiio_log_d("homeAssistant_dev.mqtt_password=%s", homeAssistant_dev.mqtt_password);
             //连接成功，保存信息
             if (!reset_flash_state)homeassistant_save_ha_deMsg(&homeAssistant_dev);
+            //发送HomeAssistant 自动发现的信息
+            discovery_payload.name = homeAssistant_dev.dev_name;
+            discovery_payload.sw_version = "1.0.0";
+            discovery_payload.unique_id = homeAssistant_dev.dev_mac;
+            discovery_payload.device.identifiers_len = 1;
+            discovery_payload.device.identifiers[0] = homeAssistant_dev.dev_mac;
+            discovery_payload.device.name = homeAssistant_dev.dev_name;
+            discovery_payload.device.manufacturer = "ai-thinker";
+            discovery_payload.device.model = CONFIG_DEVICE_TYPE;
+            discovery_payload.device.sw_version = discovery_payload.sw_version;
+
+            homeAssistant_create_device(client, &discovery_payload);
+            //发送一次灯的状态
+            homeAssistant_send_state(client, &discovery_payload, 0);
             break;
         case MQTT_EVENT_DISCONNECTED:
             aiio_log_i("MQTT_EVENT_DISCONNECTED");
@@ -73,12 +90,15 @@ static aiio_err_t mqtt_event_cb(aiio_mqtt_event_handle_t event)
             break;
         case MQTT_EVENT_PUBLISHED:
             aiio_log_i("MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
+
             break;
         case MQTT_EVENT_DATA:
             aiio_log_i("MQTT_EVENT_DATA");
-            aiio_log_i("TOPIC=%.*s\r\n", event->topic_len, event->topic);
-            aiio_log_i("DATA=%.*s\r\n", event->data_len, event->data);
-
+            aiio_log_i("TOPIC=%.*s", event->topic_len, event->topic);
+            aiio_log_i("DATA=%.*s", event->data_len, event->data);
+            //控制LED
+            devLedCtrlValueFromPayload(event->data, event->data_len);
+            homeAssistant_send_state(client, &discovery_payload, devLedCtrlGetValue());
             break;
         case MQTT_EVENT_ERROR:
             aiio_log_i("MQTT_EVENT_ERROR");

@@ -92,24 +92,28 @@ void devLedCtrlInit(void)
     aiio_hal_gpio_set(0, DEV_LED_CTRL_GREEN, 0);
 }
 
-void devLedCtrlValueFromPayload(char* payload)
+void devLedCtrlValueFromPayload(const char* payload, int payload_len)
 {
     if (payload==NULL) {
         aiio_log_e("payload is NULL");
         return;
     }
-    cJSON* root = cJSON_Parse(payload);
-    if (root==NULL) {
-        aiio_log_e("[%s]payload is no json", payload);
-        return;
-    }
-    cJSON* ctrl = cJSON_GetObjectItem(root, "control");
-    cJSON* msgid_bool = cJSON_GetObjectItem(ctrl, "1");
-    if (msgid_bool->valueint) aiio_hal_gpio_set(0, DEV_LED_CTRL_GREEN, 1);
-    else  aiio_hal_gpio_set(0, DEV_LED_CTRL_GREEN, 0);
+    char* ctr_payload = malloc(8);
+    memset(ctr_payload, 0, 8);
+    strncpy(ctr_payload, payload, payload_len);
 
-    led_dev_ctrl_state = msgid_bool->valueint;
-    cJSON_Delete(root);
+    if (strcmp(ctr_payload, "ON")==0) {
+        aiio_hal_gpio_set(0, DEV_LED_CTRL_GREEN, 1);
+
+        led_dev_ctrl_state = 1;
+    }
+
+    if (strcmp(ctr_payload, "OFF")==0) {
+        aiio_hal_gpio_set(0, DEV_LED_CTRL_GREEN, 0);
+        led_dev_ctrl_state = 0;
+    }
+    aiio_log_d("DEV_LED_CTRL_GREEN is %s", led_dev_ctrl_state?"ON":"OFF");
+    free(ctr_payload);
 }
 
 int devLedCtrlGetValue(void)

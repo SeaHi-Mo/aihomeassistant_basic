@@ -14,10 +14,99 @@ menu "HomeAssistant config"
             string "set HomeAssistant MQTT automatic discovery" 
             default "\"homeassistant\""  
     endmenu
+         choice HOMEASSISTANT_MQTT_DISCOVERY
+                bool "set mqtt discovery"
+                default MQTT_DISCOVERY_21
+
+                config MQTT_DISCOVERY_1
+                    bool "Alarm control panel"
+                config MQTT_DISCOVERY_2
+                    bool "Binary sensor"
+                config MQTT_DISCOVERY_3
+                    bool "Button"
+                config MQTT_DISCOVERY_4
+                    bool "Camera"
+                config MQTT_DISCOVERY_5
+                    bool "Cover"
+                config MQTT_DISCOVERY_6
+                    bool "Device tracker"
+                config MQTT_DISCOVERY_7
+                    bool "Device trigger"
+                config MQTT_DISCOVERY_8
+                    bool "Event"
+                config MQTT_DISCOVERY_9
+                    bool "Fan"
+                config MQTT_DISCOVERY_10
+                    bool "Humidifier"
+                config MQTT_DISCOVERY_11
+                    bool "Image"
+                config MQTT_DISCOVERY_12
+                    bool "Climate/HVAC"
+                config MQTT_DISCOVERY_13
+                    bool "Lawn mower"
+                config MQTT_DISCOVERY_14
+                    bool "Light"
+                config MQTT_DISCOVERY_15
+                    bool "Lock"
+                config MQTT_DISCOVERY_16
+                    bool "Number"
+                config MQTT_DISCOVERY_17
+                    bool "Scene"
+                config MQTT_DISCOVERY_18
+                    bool "Select"
+                config MQTT_DISCOVERY_19
+                    bool "Sensor"
+                config MQTT_DISCOVERY_20
+                    bool "Siren"
+                config MQTT_DISCOVERY_21
+                    bool "Switch"
+                config MQTT_DISCOVERY_22
+                    bool "Update"
+                config MQTT_DISCOVERY_23
+                    bool "Tag scanner"
+                config MQTT_DISCOVERY_24
+                    bool "Text"
+                config MQTT_DISCOVERY_25
+                    bool "Vacuum"
+                config MQTT_DISCOVERY_26
+                    bool "Valve"
+                config MQTT_DISCOVERY_27
+                    bool "Water heater"
+        endchoice 
+        config HOMEASSISTANT_MQTT_DISCOVERY
+                string 
+                  default "\"alarm_control_panel\""     if MQTT_DISCOVERY_1
+                  default "\"binary_sensor\""           if MQTT_DISCOVERY_2
+                  default "\"button\""                  if MQTT_DISCOVERY_3
+                  default "\"camera\""                  if MQTT_DISCOVERY_4
+                  default "\"cover\""                   if MQTT_DISCOVERY_5
+                  default "\"device_tracker\""          if MQTT_DISCOVERY_6
+                  default "\"device_trigger\""          if MQTT_DISCOVERY_7
+                  default "\"event\""                   if MQTT_DISCOVERY_8
+                  default "\"fan\""                     if MQTT_DISCOVERY_9
+                  default "\"humidifier\""              if MQTT_DISCOVERY_10
+                  default "\"image\""                   if MQTT_DISCOVERY_11
+                  default "\"climate/HVAC\""            if MQTT_DISCOVERY_12
+                  default "\"lawn_mower\""              if MQTT_DISCOVERY_13
+                  default "\"light\""                   if MQTT_DISCOVERY_14
+                  default "\"lock\""                    if MQTT_DISCOVERY_15
+                  default "\"number\""                  if MQTT_DISCOVERY_16
+                  default "\"scene\""                   if MQTT_DISCOVERY_17
+                  default "\"select\""                  if MQTT_DISCOVERY_18
+                  default "\"sensor\""                  if MQTT_DISCOVERY_19
+                  default "\"siren\""                   if MQTT_DISCOVERY_20
+                  default "\"switch\""                  if MQTT_DISCOVERY_21
+                  default "\"update\""                  if MQTT_DISCOVERY_22
+                  default "\"tag_scanner\""             if MQTT_DISCOVERY_23
+                  default "\"text\""                    if MQTT_DISCOVERY_24
+                  default "\"vacuum\""                  if MQTT_DISCOVERY_25
+                  default "\"valve\""                   if MQTT_DISCOVERY_26
+                  default "\"water_heater\""            if MQTT_DISCOVERY_27
+
      menu "chip platform"
         config DEVICE_TYPE
             string "chip platform"
-            default "Ai-M62_HA"
+            default "Ai-M62"
     endmenu
 endmenu
 
